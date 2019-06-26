@@ -24,6 +24,8 @@ namespace ElevenNote.WebMVC.Controllers
         //GET: Note/Create
         public ActionResult Create()
         {
+            var service = new CategoryService();
+            ViewBag.CategoryId = new SelectList(service.GetCategories(), "CategoryId", "CategoryName");
             return View();
         }
 
