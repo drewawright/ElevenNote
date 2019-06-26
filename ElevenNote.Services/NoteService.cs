@@ -89,6 +89,7 @@ namespace ElevenNote.Services
                         .Single(e => e.NoteId == model.NoteId && e.OwnerId == _userId);
 
                 entity.Title = model.Title;
+                entity.Category = model.Category;
                 entity.Content = model.Content;
                 entity.ModifiedUtc = DateTimeOffset.UtcNow;
 

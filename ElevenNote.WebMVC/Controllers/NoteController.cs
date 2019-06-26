@@ -34,6 +34,8 @@ namespace ElevenNote.WebMVC.Controllers
        [ValidateAntiForgeryToken]
        public ActionResult Create(NoteCreate model)
         {
+            var svc = new CategoryService();
+            ViewBag.CategoryId = new SelectList(svc.GetCategories(), "CategoryId", "CategoryName");
             if (!ModelState.IsValid) return View(model);
 
             var service = CreateNoteService();
@@ -70,6 +72,8 @@ namespace ElevenNote.WebMVC.Controllers
                     Title = detail.Title,
                     Content = detail.Content
                 };
+            var svc = new CategoryService();
+            ViewBag.CategoryId = new SelectList(svc.GetCategories(), "CategoryId", "CategoryName", detail.Category);
             return View(model);
         }
 
@@ -78,6 +82,8 @@ namespace ElevenNote.WebMVC.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, NoteEdit model)
         {
+            var svc = new CategoryService();
+            ViewBag.CategoryId = new SelectList(svc.GetCategories(), "CategoryId", "CategoryName", model.Category);
             if (!ModelState.IsValid) return View(model);
 
             if (model.NoteId != id)
