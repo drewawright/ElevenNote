@@ -11,6 +11,7 @@ namespace ElevenNote.Models
     {
         public int NoteId { get; set; }
         public string Title { get; set; }
+        public bool IsStarred { get; set; }
         public Category Category { get; set; }
         public string Content { get; set; }
     }
