@@ -9,10 +9,10 @@ using System.Web.Mvc;
 
 namespace ElevenNote.WebMVC.Controllers
 {
+    [Authorize]
     public class NoteController : Controller
     {
         // GET: Note
-        [Authorize]
         public ActionResult Index()
         {
             var service = CreateNoteService();
