@@ -42,5 +42,36 @@ namespace ElevenNote.Services
                 return query.ToArray();
             }
         }
+
+        public CategoryEdit GetCategoryById(int id)
+        {
+            using (var ctx = new ApplicationDbContext())
+            {
+                var entity =
+                    ctx
+                        .Categories
+                        .Single(e => e.CategoryId == id);
+                return
+                    new CategoryEdit
+                    {
+                        CategoryId = entity.CategoryId,
+                        CategoryName = entity.CategoryName
+                    };
+            }
+        }
+
+        public bool UpdateCategory(CategoryEdit model)
+        {
+            using (var ctx = new ApplicationDbContext())
+            {
+                var entity =
+                    ctx
+                        .Categories
+                        .Single(e => e.CategoryId == model.CategoryId);
+                entity.CategoryName = model.CategoryName;
+
+                return ctx.SaveChanges() == 1;
+            }
+        }
     }
 }
