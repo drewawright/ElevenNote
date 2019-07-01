@@ -20,6 +20,14 @@
     </div>
 }
 
+@using (Html.BeginForm())
+{
+    <p>
+        Filter by Category @Html.DropDownList("SelectedCategory", "All")
+        <input type="submit" value="Filter" />
+    </p>
+}
+
 <table class="table">
     <tr>
         <th>

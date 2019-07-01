@@ -3,6 +3,7 @@ using ElevenNote.Services;
 using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -13,11 +14,19 @@ namespace ElevenNote.WebMVC.Controllers
     public class NoteController : Controller
     {
         // GET: Note
-        public ActionResult Index()
+        public ActionResult Index(int? SelectedCategory)
         {
-            var service = CreateNoteService();
-            var model = service.GetNotes();
+            var categories = new CategoryService().GetCategories().OrderBy(c => c.CategoryName).ToList();
+            ViewBag.SelectedCategory = new SelectList(categories, "CategoryId", "CategoryName", SelectedCategory);
+            int categoryId = SelectedCategory.GetValueOrDefault();
 
+            var service = CreateNoteService();
+            //var model = service.GetNotes();
+
+            IQueryable<NoteListItem> model = service.GetNotes().AsQueryable()
+                .Where(n => !SelectedCategory.HasValue || n.Category.CategoryId == categoryId)
+                .OrderBy(x => x.NoteId)
+                .Include(x => x.Category.CategoryId);
             return View(model);
         }
 
