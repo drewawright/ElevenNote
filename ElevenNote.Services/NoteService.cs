@@ -19,22 +19,32 @@ namespace ElevenNote.Services
 
         public bool CreateNote(NoteCreate model)
         {
-            var entity =
-                new Note()
-                {
-                    OwnerId = _userId,
-                    Title = model.Title,
-                    CategoryId = model.CategoryId,
-                    Category = model.Category,
-                    Content = model.Content,
-                    CreatedUtc = DateTimeOffset.Now
-                };
-
+            Category category = new Category();
             using (var ctx = new ApplicationDbContext())
             {
+                var query =
+                    ctx
+                        .Categories
+                        .Where(m => m.CategoryId == model.CategoryId)
+                        .Single();
+                category = query;
+
+
+                var entity =
+                    new Note()
+                    {
+                        OwnerId = _userId,
+                        Title = model.Title,
+                        CategoryId = model.CategoryId,
+                        Category = category,
+                        Content = model.Content,
+                        CreatedUtc = DateTimeOffset.Now
+                    };
+
                 ctx.Notes.Add(entity);
-                return ctx.SaveChanges() == 1;
-            }
+                var actual = ctx.SaveChanges();
+                return actual == 1;
+            }            
         }
 
         public IEnumerable<NoteListItem> GetNotes()
@@ -72,7 +82,8 @@ namespace ElevenNote.Services
                     {
                         NoteId = entity.NoteId,
                         Title = entity.Title,
-                        Category = entity.Category,
+                        CategoryId = entity.Category.CategoryId,
+                        CategoryName = entity.Category.CategoryName,
                         Content = entity.Content,
                         CreatedUtc = entity.CreatedUtc,
                         ModifiedUtc = entity.ModifiedUtc
@@ -82,6 +93,8 @@ namespace ElevenNote.Services
 
         public bool UpdateNote(NoteEdit model)
         {
+            Category category = new Category();
+
             using (var ctx = new ApplicationDbContext())
             {
                 var entity =
@@ -89,8 +102,15 @@ namespace ElevenNote.Services
                         .Notes
                         .Single(e => e.NoteId == model.NoteId && e.OwnerId == _userId);
 
+                var query =
+                    ctx
+                        .Categories
+                        .Where(m => m.CategoryId == model.CategoryId)
+                        .Single();
+                category = query;
+
                 entity.Title = model.Title;
-                entity.Category = model.Category;
+                entity.Category = category;
                 entity.Content = model.Content;
                 entity.ModifiedUtc = DateTimeOffset.UtcNow;
                 entity.IsStarred = model.IsStarred;
