@@ -1,0 +1,52 @@
+<h1>Index</h1>
+<a mat-raised-button color="primary" routerLink="/notes/create">Create New</a>
+<hr>
+
+<div>
+    <mat-table #table [dataSource]="dataSource">
+        <mat-header-row *matHeaderRowDef="columnNames"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: columnNames;"></mat-row>
+       
+        <ng-container matColumnDef="details">
+            <mat-header-cell *matHeaderCellDef class="matColumnSize"></mat-header-cell>
+            <mat-cell *matCellDef="let note" routerLink="/notes/detail/{{note.NoteId}}">
+                <i class="material-icons">library_books</i>
+            </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="NoteId">
+            <mat-header-cell *matHeaderCellDef class="matColumnSize"> Note # </mat-header-cell>
+            <mat-cell *matCellDef="let note">{{note.NoteId}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="Title">
+            <mat-header-cell *matHeaderCellDef class="matColumnSize"> Title </mat-header-cell>
+            <mat-cell *matCellDef="let note">{{note.Title}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="IsStarred">
+            <mat-header-cell *matHeaderCellDef class="matColumnSize"> Favorite </mat-header-cell>
+            <mat-cell *matCellDef="let note">
+                <button mat-icon-button *ngIf="note.IsStarred" disabled>
+                    <i class="material-icons" (click)="isStarred(note, $event)" disabled>star</i>
+                </button>
+                <button mat-icon-button *ngIf="!note.IsStarred">
+                    <i class="material-icons" (click)="isStarred(note, $event)">star</i>
+                </button>
+            </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="CreatedUtc">
+                <mat-header-cell *matHeaderCellDef class="matColumnSize"> Created </mat-header-cell>
+                <mat-cell *matCellDef="let note">{{note.CreatedUtc | date: 'fullDate'}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="buttons">
+                <mat-header-cell *matHeaderCellDef class="matColumnSize"> </mat-header-cell>
+                <mat-cell *matCellDef="let note">
+                    <i mat-icon class="material-icons" routerLink="/notes/edit/{{note.NoteId}}">edit</i>
+                    <i class="material-icons" routerLink="/notes/delete/{{note.NoteId}}">delete</i>
+                </mat-cell>
+        </ng-container>
+    </mat-table>
+</div>

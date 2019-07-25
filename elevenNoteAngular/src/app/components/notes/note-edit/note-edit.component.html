@@ -1,0 +1,39 @@
+<h1>Edit this Note</h1>
+<hr>
+
+<div *ngIf="note">
+    <form #f="ngForm" (ngSubmit)="onSubmit(f)" [formGroup]="editNoteForm">
+        <div>
+            <div hidden>
+                <mat-form-field>
+                    <input matInput placeholder="NoteId" formControlName="NoteId" type="NoteId" required [value]="note.NoteId" />
+                </mat-form-field>
+            </div>
+            <div hidden>
+                <button mat-icon-button disabled>
+                    <i class="material-icons" (click)="isStarred(note, $event)" disabled>star</i>
+                </button>
+            </div>
+        </div>
+
+        <div>
+            <div>
+                 <mat-form-field>
+                    <input matInput placeholder="Title" formControlName="Title" type="Title" required [value]="note.Title" />
+                </mat-form-field>
+            </div>
+            <div>
+                <mat-form-field>
+                    <input matInput placeholder="Content" formControlName="Content" type="Content" required [value]="note.Content" />
+                </mat-form-field>
+            </div>
+            <div>
+                <mat-form-field>
+                    <input matInput placeholder="CategoryID" formControlName="CategoryID" type="CategoryID" required [value]="note.CategoryID" />
+                </mat-form-field>
+            </div>
+        </div>
+    </form>
+</div>
+
+<a mat-button routerLink="/notes">Back to List</a>
